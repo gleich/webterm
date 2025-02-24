@@ -2,8 +2,10 @@ package cmd
 
 import (
 	"bufio"
+	"errors"
 	"net/http"
 	"os/exec"
+	"syscall"
 
 	"github.com/gorilla/websocket"
 	"go.mattglei.ch/timber"
@@ -36,7 +38,8 @@ func Stream(command *exec.Cmd) http.HandlerFunc {
 		scanner := bufio.NewScanner(stdout)
 		for scanner.Scan() {
 			line := scanner.Text()
-			if err := conn.WriteMessage(websocket.TextMessage, []byte(line)); err != nil {
+			err := conn.WriteMessage(websocket.TextMessage, []byte(line))
+			if err != nil && !errors.Is(err, syscall.EPIPE) {
 				timber.Error(err, "failed to write to websocket")
 				break
 			}
