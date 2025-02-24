@@ -2,7 +2,10 @@ module go.mattglei.ch/webterm
 
 go 1.24.0
 
-require go.mattglei.ch/timber v1.2.2
+require (
+	github.com/gorilla/websocket v1.5.3
+	go.mattglei.ch/timber v1.2.2
+)
 
 require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
